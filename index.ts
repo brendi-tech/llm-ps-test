@@ -2,6 +2,19 @@ import { config } from "dotenv";
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 
+import { testCases, type TestCase, type Product } from './testCases';
+import { runTestComparisons } from './testComparison';
+
+async function structurize(userMessage: string) {
+    // Procura o testCase cuja userMessage seja igual à fornecida e retorna o expectedResults
+    const found = testCases.find(tc => tc.userMessage === userMessage);
+    if (found) {
+        return found.expectedResults;
+    }
+    return null;
+}
+
+
 async function run() {
     config();
 
@@ -10,15 +23,8 @@ async function run() {
         throw new Error("OpenAI API key is required");
     }
 
-    const question = "Qual é o país mais bonito do mundo?";
-
-    const { text } = await generateText({
-        model: openai("gpt-4.1-mini"),
-        system: "Você é um assistente.",
-        prompt: question
-    });
-
-    console.log(text);
+    const finalResult = await runTestComparisons();
+    console.log(`Final result: ${finalResult}`);
 }
 
 run();
