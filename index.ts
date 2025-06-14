@@ -10,11 +10,11 @@ async function run() {
         throw new Error("OpenAI API key is required");
     }
 
-    const question = "De qual país é Singapura?";
+    const question = "Qual é o país mais bonito do mundo?";
 
     const { text } = await generateText({
-        model: openai("gpt-4o-mini-2024-07-18"),
-        system: "Você é um assistente de geografia.",
+        model: openai("gpt-4.1-mini"),
+        system: "Você é um assistente.",
         prompt: question
     });
 
